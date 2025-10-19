@@ -6,23 +6,49 @@ server:
 spring:
   application:
     name: vaudoise-assurances
-  profiles:
-    active: dev
-  datasource:
-    url: jdbc:postgresql://localhost:5432/imanagemycompany?sslmode=disable
-    username: postgres
-    password: admin2000!
   jpa:
     show-sql: false
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
         proc.param_null_passing: true
       order_by:
         default_null_ordering: first
+  profiles:
+    active: h2
 
 logging:
   level:
     io.mmujcinovic.vaudoiseassurances: debug
-    org.hibernate.sql: debug
+    # org.hibernate.SQL: debug
     # org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+# DEFAULT PROFILE: H2 file-based (persistent, no prerequisites)
+---
+spring:
+  config:
+    activate:
+      on-profile: h2
+  datasource:
+    url: jdbc:h2:file:./data/appdb;MODE=PostgreSQL;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+# POSTGRES PROFILE (for a realistic run or Docker usage)
+---
+spring:
+  config:
+    activate:
+      on-profile: postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5433/vaudoiseassurances
+    username: username
+    password: password
+    driver-class-name: org.postgresql.Driver

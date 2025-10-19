@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: vaudoiseassurances
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+    ports:
+      # Map container's 5432 to host's 5433 to avoid conflicts with a local PostgreSQL instance
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:

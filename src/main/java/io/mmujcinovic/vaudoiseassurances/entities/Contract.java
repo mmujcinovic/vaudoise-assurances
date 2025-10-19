@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "contract", schema = "public", indexes = {
+@Table(name = "contract", indexes = {
         @Index(name = "idx_contract_client_end", columnList = "client_id,end_date"),
         @Index(name = "idx_contract_client_end_update", columnList = "client_id,end_date,update_date")
 })

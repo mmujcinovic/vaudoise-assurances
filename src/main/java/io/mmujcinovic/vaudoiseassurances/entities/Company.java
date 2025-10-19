@@ -12,7 +12,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "company", schema = "public")
+@Table(name = "company")
 @NoArgsConstructor
 @Getter
 @Setter

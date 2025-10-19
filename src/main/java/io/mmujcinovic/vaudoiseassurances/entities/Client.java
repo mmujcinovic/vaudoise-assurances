@@ -10,7 +10,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "client", schema = "public", indexes = {
+@Table(name = "client", indexes = {
         @Index(name = "idx_client_active", columnList = "id,active"),
 })
 // Uses the JOINED strategy so each subclass has its own table linked to the parent by primary key
