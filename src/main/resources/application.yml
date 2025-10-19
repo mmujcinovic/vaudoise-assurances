@@ -1,0 +1,28 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: vaudoise-assurances
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/imanagemycompany?sslmode=disable
+    username: postgres
+    password: admin2000!
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        proc.param_null_passing: true
+      order_by:
+        default_null_ordering: first
+
+logging:
+  level:
+    io.mmujcinovic.vaudoiseassurances: debug
+    org.hibernate.sql: debug
+    # org.hibernate.type.descriptor.sql.BasicBinder: trace
