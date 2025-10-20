@@ -17,6 +17,8 @@ Uses Spring Data JPA to manage persistence transparently, with custom queries wh
 
 **Soft delete** is applied on clients by using an `active` flag and closing contracts instead of removing data.
 
+The business logic prevents operations on inactive clients to ensure data integrity. For example, creating a contract for a deactivated client returns a functional error. This approach guarantees consistency and preserves the relationship with existing contracts.
+
 Two profiles are available:
 
 • `h2` (file-based, no setup)
@@ -144,6 +146,9 @@ Expected response of type Person.
 Retrieves the list of active contracts for a specific client, optionally filtered by update date.
 ```bash
 curl -i -X GET http://localhost:8080/api/contracts/1
+```
+```bash
+curl -i -X GET "http://localhost:8080/api/contracts/1?updatedAfter=2025-01-01&updatedBefore=2025-12-31"
 ```
 Expected response.
 ```bash
