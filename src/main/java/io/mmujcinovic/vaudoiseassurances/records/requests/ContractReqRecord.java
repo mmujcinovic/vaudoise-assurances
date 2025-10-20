@@ -8,12 +8,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record ContractReqRecord(
-        @NotNull
+        @NotNull(message = "Start date is required")
         @JsonFormat(pattern="yyyy-MM-dd")
         LocalDate startDate,
         @JsonFormat(pattern="yyyy-MM-dd")
         LocalDate endDate,
-        @NotNull
-        @PositiveOrZero
+        @NotNull(message = "Cost amount is required")
+        @PositiveOrZero(message = "Cost amount must be zero or a positive value")
         BigDecimal costAmount
 ) { }

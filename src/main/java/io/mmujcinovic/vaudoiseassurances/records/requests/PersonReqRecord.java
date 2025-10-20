@@ -9,12 +9,12 @@ import jakarta.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 
 public record PersonReqRecord(
-        @JsonUnwrapped
-        @NotNull
+        @NotNull(message = "Client data is required")
         @Valid
+        @JsonUnwrapped
         ClientReqRecord clientRequestRecord, // Common fields
-        @NotNull
+        @NotNull(message = "Birthdate is required")
         @JsonFormat(pattern="yyyy-MM-dd")
-        @PastOrPresent
+        @PastOrPresent(message = "Birthdate cannot be in the future")
         LocalDate birthdate
 ) implements ClientReqInterfaceRecord { }

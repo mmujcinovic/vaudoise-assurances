@@ -5,12 +5,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 public record ClientReqRecord(
-        @NotBlank
+        @NotBlank(message = "Name is required")
         String name,
-        @NotBlank
-        @Pattern(regexp="^\\+?[0-9 ]+$")
+        @NotBlank(message = "Phone number is required")
+        @Pattern(
+                regexp = "^\\+?[0-9]{10}$",
+                message = "Phone number must contain exactly 10 digits, with an optional leading +")
         String phone,
-        @NotBlank
-        @Email
+        @NotBlank(message = "Email is required")
+        @Email(message = "Invalid email format")
         String email
 ) { }

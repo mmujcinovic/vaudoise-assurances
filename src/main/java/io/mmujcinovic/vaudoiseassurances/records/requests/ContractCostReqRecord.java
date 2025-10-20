@@ -6,7 +6,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 
 public record ContractCostReqRecord(
-        @NotNull
-        @PositiveOrZero
+        @NotNull(message = "Cost amount is required")
+        @PositiveOrZero(message = "Cost amount must be zero or a positive value")
         BigDecimal costAmount
 ) { }
