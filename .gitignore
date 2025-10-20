@@ -56,3 +56,9 @@ build/
 
 # Misc
 HELP.md
+
+# H2
+*.mv.db
+*.trace.db
+*.trace
+/data/
