@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -23,7 +21,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 // Enables JPA auditing (e.g., automatic handling of creation and update timestamps) by registering the AuditingEntityListener for this entity
-@EntityListeners(AuditingEntityListener.class)
+//@EntityListeners(AuditingEntityListener.class)
 public class Contract implements Serializable {
 
     @Serial
@@ -49,10 +47,9 @@ public class Contract implements Serializable {
     @Column(name = "cost_amount", nullable = false, precision = 18, scale = 2)
     private BigDecimal costAmount; // Cost amount
 
-    @NotNull
     @JsonIgnore
-    @LastModifiedDate // Automatically stores the date of the most recent update to this entity
-    @Column(name = "update_date", nullable = false)
+    //@LastModifiedDate // Automatically stores the date of the most recent update to this entity
+    @Column(name = "update_date")
     private LocalDate updateDate; // Update date
 
     @Override

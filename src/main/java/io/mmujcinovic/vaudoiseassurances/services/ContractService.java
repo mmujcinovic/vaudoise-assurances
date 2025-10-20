@@ -144,17 +144,18 @@ public class ContractService {
     }
 
     /**
-     * Updates the cost amount of an active contract.
+     * Updates only the cost amount of an active contract.
      * <p>
-     * The method first checks whether a contract with the given ID exists
-     * and is active. If not, a {@code BadRequestException} is thrown.
-     * Once the contract is retrieved, its cost amount is updated using
-     * the data from the provided request record, and the entity is
+     * The method first verifies that a contract with the given ID exists
+     * and is currently active. If not, a {@code BadRequestException} is thrown.
+     * When the contract is found, its cost amount is updated with the value
+     * provided in the request record. In accordance with the requirements,
+     * the update date is also set to the current date, and the entity is
      * persisted via the repository.
      *
      * @param id the identifier of the contract to update
      * @param costAmount the request record containing the new cost value
-     * @return the updated and saved {@code Contract}
+     * @return the updated {@code Contract}
      * @throws BadRequestException if the contract does not exist or is inactive
      */
     public Contract updateContractCost(@NotNull @Positive Long id,
@@ -164,6 +165,7 @@ public class ContractService {
                         new BadRequestException("Not found contract by id: " + id,
                                 "Update contract cost failed"));
         contract.setCostAmount(costAmount.costAmount());
+        contract.setUpdateDate(LocalDate.now());
         return this.contractRepository.save(contract);
     }
 
