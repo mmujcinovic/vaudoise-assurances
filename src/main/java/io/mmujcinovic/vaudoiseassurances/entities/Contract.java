@@ -13,7 +13,6 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "contract", indexes = {
@@ -54,7 +53,7 @@ public class Contract implements Serializable {
     @JsonIgnore
     @LastModifiedDate // Automatically stores the date of the most recent update to this entity
     @Column(name = "update_date", nullable = false)
-    private LocalDateTime updateDate; // Update date
+    private LocalDate updateDate; // Update date
 
     @Override
     public boolean equals(Object object) {

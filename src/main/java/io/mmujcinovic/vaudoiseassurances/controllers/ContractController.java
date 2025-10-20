@@ -58,23 +58,24 @@ public class ContractController {
      * optionally filtered by update date.
      * <p>
      * The client's identifier is provided as a path variable. Two optional query
-     * parameters, {@code updatedBefore} and {@code updatedAfter}, can be used
+     * parameters, {@code updatedAfter} and {@code updatedBefore}, can be used
      * to restrict the result set based on the contract's last update date.
-     * The method delegates the retrieval to the service layer and returns
-     * an HTTP 200 response containing the list of matching contract records.
+     * The service ensures that the client exists and is active before fetching
+     * contracts. The method returns an HTTP 200 response containing the list
+     * of matching contract records.
      *
      * @param clientId the identifier of the client whose active contracts are requested
-     * @param updatedBefore an optional upper bound date for filtering by last update
-     * @param updatedAfter an optional lower bound date for filtering by last update
+     * @param updatedAfter an optional lower bound for filtering by last update
+     * @param updatedBefore an optional upper bound for filtering by last update
      * @return a {@code ResponseEntity} with HTTP status 200 and the list of contract records
      */
     @GetMapping("/{clientId}")
     public ResponseEntity<List<ContractRespRecord>> findActiveContractsForClient(
             @PathVariable("clientId") @Positive Long clientId,
-            @RequestParam(required = false) LocalDate updatedBefore,
-            @RequestParam(required = false) LocalDate updatedAfter) {
+            @RequestParam(required = false) LocalDate updatedAfter,
+            @RequestParam(required = false) LocalDate updatedBefore) {
         List<Contract> activeContractList =
-                this.contractService.findActiveContractsForClient(clientId, updatedBefore, updatedAfter);
+                this.contractService.findActiveContractsForClient(clientId, updatedAfter, updatedBefore);
         return ResponseEntity.ok(ContractService.mapToContractRespRecordList(activeContractList));
     }
 

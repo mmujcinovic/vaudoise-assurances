@@ -55,33 +55,30 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
                                                 @Param("at") LocalDate at);
 
     /**
-     * Retrieves all active contracts for a specific client at a given date,
-     * optionally filtered by a range of update dates.
+     * Retrieves all active contracts for a specific client within an optional update date range.
      * <p>
-     * A contract is considered active if its end date is {@code null} or
-     * strictly after the specified reference date. The query can be further
-     * constrained using the optional {@code updatedBefore} and
-     * {@code updatedAfter} parameters. If either is {@code null}, the
-     * corresponding bound defaults to the contract's own update date
-     * via {@code COALESCE}.
+     * A contract is considered active if its end date is {@code null}
+     * or strictly after the specified reference date. In addition,
+     * the contracts can be filtered by an update date range if
+     * {@code updatedAfter} and/or {@code updatedBefore} are provided.
      *
      * @param clientId the identifier of the client whose contracts are requested
      * @param at the reference date used to determine if contracts are active
-     * @param updatedBefore an optional upper bound for the update date filter
-     * @param updatedAfter an optional lower bound for the update date filter
-     * @return a list of matching active {@code Contract} entities
+     * @param updatedAfter the lower bound of the contract's updateDate (inclusive), or {@code null} to ignore
+     * @param updatedBefore the upper bound of the contract's updateDate (inclusive), or {@code null} to ignore
+     * @return a list of active {@code Contract} entities matching the given criteria
      */
     @Query("""
             select  c
             from    Contract c
             where   c.clientId = :clientId
             and     (c.endDate is null or :at < c.endDate)
-            and     (c.updateDate between coalesce(:updatedBefore, c.updateDate) and coalesce(:updatedAfter, c.updateDate))
+            and     (c.updateDate between coalesce(:updatedAfter, c.updateDate) and coalesce(:updatedBefore, c.updateDate))
             """)
     List<Contract> findActiveContractsForClientBetweenUpdatedDate(@Param("clientId") Long clientId,
                                                                   @Param("at") LocalDate at,
-                                                                  @Param("updatedBefore") LocalDate updatedBefore,
-                                                                  @Param("updatedAfter") LocalDate updatedAfter);
+                                                                  @Param("updatedAfter") LocalDate updatedAfter,
+                                                                  @Param("updatedBefore") LocalDate updatedBefore);
 
     /**
      * Calculates the total cost of all active contracts for a specific client

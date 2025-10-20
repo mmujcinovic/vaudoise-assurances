@@ -72,31 +72,30 @@ public class ContractService {
     }
 
     /**
-     * Retrieves all active contracts for a specific client, optionally filtered
-     * by a range of update dates.
+     * Retrieves all active contracts for a given client, optionally filtered by an update date range.
      * <p>
-     * The method first checks that the client with the given ID exists and is
-     * active. If not, a {@code BadRequestException} is thrown. Once validated,
-     * the repository is queried to return the contracts that are active at the
-     * current date and optionally match the provided update date range.
+     * A contract is considered active if its end date is {@code null} or strictly
+     * after today's date. If {@code updatedAfter} and/or {@code updatedBefore}
+     * are provided, the results are further filtered by the contract's updateDate.
+     * If the client does not exist or is inactive, a BadRequestException is thrown.
      *
-     * @param clientId the identifier of the client whose contracts are requested
-     * @param updatedBefore an optional upper bound for the update date filter
-     * @param updatedAfter an optional lower bound for the update date filter
-     * @return a list of active {@code Contract} entities matching the criteria
+     * @param clientId the identifier of the client
+     * @param updatedAfter the lower bound for the contract's updateDate (inclusive), or {@code null} to ignore
+     * @param updatedBefore the upper bound for the contract's updateDate (inclusive), or {@code null} to ignore
+     * @return a list of active contracts matching the criteria
      * @throws BadRequestException if the client does not exist or is inactive
      */
     public List<Contract> findActiveContractsForClient(
             @NotNull @Positive Long clientId,
-            @Nullable LocalDate updatedBefore,
-            @Nullable LocalDate updatedAfter) {
+            @Nullable LocalDate updatedAfter,
+            @Nullable LocalDate updatedBefore) {
         this.clientService.getObject().findActiveClient(clientId)
                 .orElseThrow(() ->
                         new BadRequestException("Not found client by id: " + clientId,
                                 "Find active contracts failed"));
         return this.contractRepository
                 .findActiveContractsForClientBetweenUpdatedDate(clientId,
-                        updatedBefore, updatedAfter, LocalDate.now());
+                        LocalDate.now(), updatedAfter, updatedBefore);
     }
 
     /**
