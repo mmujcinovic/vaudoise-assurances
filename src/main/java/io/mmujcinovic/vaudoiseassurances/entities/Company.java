@@ -22,7 +22,7 @@ public class Company extends Client implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotNull
-    @Column(name = "company_identifier", nullable = false, updatable = false)
+    @Column(name = "company_identifier", nullable = false, updatable = false, unique = true)
     private String companyIdentifier; // Company identifier
 
     @Override

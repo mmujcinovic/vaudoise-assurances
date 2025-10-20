@@ -41,24 +41,32 @@ public class ClientService {
     /**
      * Creates a new client based on the concrete subtype of the request record.
      * <p>
-     * If the request is a {@code CompanyReqRecord}, a new {@code Company} entity
-     * is initialized with the common fields as well as the company-specific
-     * data, then marked as active and saved. If the request is a
-     * {@code PersonReqRecord}, a {@code Person} entity is created in the
-     * same way, including person-specific attributes. The newly created
-     * entity is then persisted in the repository.
+     * If the request is a {@code CompanyReqRecord}, this method first checks
+     * whether an active company with the same identifier already exists.
+     * If so, a {@code BadRequestException} is thrown. Otherwise, a new
+     * {@code Company} entity is initialized with the common client fields
+     * and the company-specific data, marked as active, then persisted.
      * <p>
-     * If the provided request type does not match any supported subtype
-     * (which should not occur if the sealed interface is enforced), a
-     * {@code BadRequestException} is thrown.
+     * If the request is a {@code PersonReqRecord}, a new {@code Person} entity
+     * is created, populated with common fields and the person-specific data
+     * (such as birthdate), marked as active, and then saved.
+     * <p>
+     * If the provided request does not match any supported subtype
+     * (which should not happen if the sealed interface is enforced),
+     * a {@code BadRequestException} is thrown.
      *
      * @param clientReq the request record containing the data needed to create the client
      * @return the newly created and saved {@code Client}
-     * @throws BadRequestException if the request type is unsupported
-     */
-    public Client createClient(@NotNull @Valid ClientReqInterfaceRecord clientReq) {
+     * @throws BadRequestException if the client type is unsupported or if the company identifier already exists
+     */    public Client createClient(@NotNull @Valid ClientReqInterfaceRecord clientReq) {
         // Case Company
         if (clientReq instanceof CompanyReqRecord companyRequestRecord) {
+            if (this.clientRepository
+                    .existsByActiveCompanyIdentifier(companyRequestRecord.companyIdentifier())) {
+                throw new BadRequestException("A company with identifier '%s' already exists"
+                        .formatted(companyRequestRecord.companyIdentifier()),
+                        "Create client failed");
+            }
             Company company = this.initCommonFieldClient(new Company(), companyRequestRecord.clientRequestRecord());
             company.setActive(true);
             company.setCompanyIdentifier(companyRequestRecord.companyIdentifier());

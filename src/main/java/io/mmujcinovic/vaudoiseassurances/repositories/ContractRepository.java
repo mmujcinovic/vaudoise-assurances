@@ -29,7 +29,7 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
             from    Contract c
             where   c.id = :id
             and     (c.endDate is null or :at < c.endDate)
-            """)
+           """)
     Optional<Contract> findActiveContractAt(@Param("id") Long id,
                                             @Param("at") LocalDate at);
 
@@ -50,7 +50,7 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
             from    Contract c
             where   c.clientId = :clientId
             and     (c.endDate is null or :at < c.endDate)
-            """)
+           """)
     List<Contract> findActiveContractsForClient(@Param("clientId") Long clientId,
                                                 @Param("at") LocalDate at);
 
@@ -76,7 +76,7 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
             and     (c.endDate is null or :at < c.endDate)
             and     (coalesce(:updatedAfter, null) is null or :updatedAfter <= c.updateDate)
             and     (coalesce(:updatedBefore, null) is null or :updatedBefore >= c.updateDate)
-            """)
+           """)
     List<Contract> findActiveContractsForClientBetweenUpdatedDate(@Param("clientId") Long clientId,
                                                                   @Param("at") LocalDate at,
                                                                   @Param("updatedAfter") LocalDate updatedAfter,
@@ -100,7 +100,7 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
             from    Contract c
             where   c.clientId = :clientId
             and     (c.endDate is null or :at < c.endDate)
-            """)
+           """)
     BigDecimal findSumActiveContractsCostForClientAt(@Param("clientId") Long clientId,
                                                      @Param("at") LocalDate at);
 }
